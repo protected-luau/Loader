@@ -1,71 +1,84 @@
--- [[ OP BLADE - PREMIUM ELEGANT UI ]] --
+-- [[ OP BLADE - ELEGANT CUSTOM UI ]] --
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
 
--- Global Settings
+-- Global Settings (Toggles)
 _G.GodMode = false
-_G.MagnetLoot = false
+_G.AutoHeal = false
+
+-- [[ NOTIFICATION SYSTEM ]] --
+local function SendNotification(title, text)
+    local NotificationGui = Instance.new("ScreenGui")
+    NotificationGui.Parent = game.CoreGui
+    
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(0, 250, 0, 80)
+    Frame.Position = UDim2.new(1, 5, 0.8, 0)
+    Frame.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+    Frame.Parent = NotificationGui
+    
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 10)
+    Corner.Parent = Frame
+    
+    local TTitle = Instance.new("TextLabel")
+    TTitle.Text = title
+    TTitle.Size = UDim2.new(1, -20, 0, 30)
+    TTitle.Position = UDim2.new(0, 10, 0, 5)
+    TTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TTitle.Font = Enum.Font.Ubuntu
+    TTitle.TextSize = 18
+    TTitle.BackgroundTransparency = 1
+    TTitle.Parent = Frame
+    
+    local TText = Instance.new("TextLabel")
+    TText.Text = text
+    TText.Size = UDim2.new(1, -20, 0, 30)
+    TText.Position = UDim2.new(0, 10, 0, 35)
+    TText.TextColor3 = Color3.fromRGB(180, 180, 180)
+    TText.Font = Enum.Font.Ubuntu
+    TText.TextSize = 14
+    TText.BackgroundTransparency = 1
+    TText.Parent = Frame
+
+    -- Animation
+    Frame:TweenPosition(UDim2.new(1, -260, 0.8, 0), "Out", "Quart", 0.5)
+    task.wait(4)
+    Frame:TweenPosition(UDim2.new(1, 5, 0.8, 0), "In", "Quart", 0.5)
+    task.wait(0.5)
+    NotificationGui:Destroy()
+end
+
+SendNotification("SilentExecute", "Enjoy This Script ;D")
 
 -- [[ UI CORE ]] --
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "OPBlade_Premium"
+ScreenGui.Name = "OPBlade_Elegant"
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
 
 local Main = Instance.new("Frame")
 Main.Name = "Main"
 Main.Parent = ScreenGui
-Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Main.BackgroundTransparency = 0.1
+Main.BackgroundColor3 = Color3.fromRGB(54, 57, 63) -- Discord Dark Color
 Main.Position = UDim2.new(0.5, -160, 0.5, -130)
-Main.Size = UDim2.new(0, 320, 0, 360)
+Main.Size = UDim2.new(0, 320, 0, 340)
 Main.ClipsDescendants = true
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = Main
 
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Thickness = 2
-UIStroke.Color = Color3.fromRGB(45, 45, 45)
-UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-UIStroke.Parent = Main
-
--- [[ TOPBAR ]] --
+-- [[ TOPBAR (Title Integrated) ]] --
 local Topbar = Instance.new("Frame")
 Topbar.Name = "Topbar"
 Topbar.Parent = Main
-Topbar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Topbar.BackgroundColor3 = Color3.fromRGB(54, 57, 63) -- Same as Main (Seamless)
 Topbar.Size = UDim2.new(1, 0, 0, 50)
 
-local TopCorner = Instance.new("UICorner")
-TopCorner.CornerRadius = UDim.new(0, 15)
-TopCorner.Parent = Topbar
-
-local Title = Instance.new("TextLabel")
-Title.Parent = Topbar
-Title.Text = "⚔️ OP BLADE"
-Title.Font = Enum.Font.Ubuntu
-Title.TextColor3 = Color3.fromRGB(255, 50, 50)
-Title.TextSize = 18
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Position = UDim2.new(0, 65, 0, 5)
-Title.Size = UDim2.new(0, 150, 0, 25)
-
-local SubTitle = Instance.new("TextLabel")
-SubTitle.Parent = Topbar
-SubTitle.Text = "Made by @SilentExecute"
-SubTitle.Font = Enum.Font.Ubuntu
-SubTitle.TextColor3 = Color3.fromRGB(180, 180, 180)
-SubTitle.TextSize = 11
-SubTitle.TextXAlignment = Enum.TextXAlignment.Left
-SubTitle.Position = UDim2.new(0, 65, 0, 22)
-SubTitle.Size = UDim2.new(0, 150, 0, 20)
-
--- [[ AVATAR SYSTEM ]] --
 local AvFrame = Instance.new("ImageLabel")
 AvFrame.Parent = Topbar
 AvFrame.Position = UDim2.new(0, 12, 0, 7)
@@ -75,11 +88,21 @@ local AvCorner = Instance.new("UICorner")
 AvCorner.CornerRadius = UDim.new(1, 0)
 AvCorner.Parent = AvFrame
 
--- [[ BUTTONS CONTROL ]] --
+local Title = Instance.new("TextLabel")
+Title.Parent = Topbar
+Title.Text = "⚔️ OP BLADE"
+Title.Font = Enum.Font.Ubuntu
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 18
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Position = UDim2.new(0, 55, 0, 0)
+Title.Size = UDim2.new(0, 150, 1, 0)
+Title.BackgroundTransparency = 1
+
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Text = "✕"
 CloseBtn.Parent = Topbar
-CloseBtn.Position = UDim2.new(1, -35, 0, 10)
+CloseBtn.Position = UDim2.new(1, -35, 0, 12)
 CloseBtn.Size = UDim2.new(0, 25, 0, 25)
 CloseBtn.BackgroundTransparency = 1
 CloseBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -88,17 +111,17 @@ CloseBtn.TextSize = 18
 local MiniBtn = Instance.new("TextButton")
 MiniBtn.Text = "—"
 MiniBtn.Parent = Topbar
-MiniBtn.Position = UDim2.new(1, -65, 0, 10)
+MiniBtn.Position = UDim2.new(1, -65, 0, 12)
 MiniBtn.Size = UDim2.new(0, 25, 0, 25)
 MiniBtn.BackgroundTransparency = 1
 MiniBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
 MiniBtn.TextSize = 18
 
--- [[ CONTAINER ]] --
+-- [[ CONTENT CONTAINER ]] --
 local Container = Instance.new("ScrollingFrame")
 Container.Parent = Main
-Container.Position = UDim2.new(0, 10, 0, 60)
-Container.Size = UDim2.new(1, -20, 1, -70)
+Container.Position = UDim2.new(0, 10, 0, 55)
+Container.Size = UDim2.new(1, -20, 1, -65)
 Container.BackgroundTransparency = 1
 Container.ScrollBarThickness = 0
 
@@ -106,12 +129,12 @@ local UIList = Instance.new("UIListLayout")
 UIList.Parent = Container
 UIList.Padding = UDim.new(0, 8)
 
--- [[ FUNCTIONS ]] --
-local function CreateButton(name, isToggle, callback)
+-- [[ UI FUNCTIONS ]] --
+local function CreateToggle(name, callback)
     local btn = Instance.new("TextButton")
     btn.Parent = Container
-    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    btn.Size = UDim2.new(1, 0, 0, 40)
+    btn.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+    btn.Size = UDim2.new(1, 0, 0, 42)
     btn.Text = name
     btn.TextColor3 = Color3.fromRGB(230, 230, 230)
     btn.Font = Enum.Font.Ubuntu
@@ -119,57 +142,43 @@ local function CreateButton(name, isToggle, callback)
     btn.AutoButtonColor = false
     
     local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 8)
+    c.CornerRadius = UDim.new(0, 6)
     c.Parent = btn
 
-    local state = false
+    local active = false
     btn.MouseButton1Click:Connect(function()
-        if isToggle then
-            state = not state
-            local targetColor = state and Color3.fromRGB(255, 50, 50) or Color3.fromRGB(40, 40, 40)
-            TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = targetColor}):Play()
-            callback(state)
-        else
-            btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-            task.wait(0.1)
-            btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            callback()
-        end
+        active = not active
+        local targetColor = active and Color3.fromRGB(88, 101, 242) or Color3.fromRGB(47, 49, 54)
+        TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = targetColor}):Play()
+        callback(active)
     end)
 end
 
--- [[ LOGIC: MAGNET LOOT (FIXED) ]] --
-task.spawn(function()
-    while task.wait(0.1) do
-        if _G.MagnetLoot then
-            pcall(function()
-                local hrp = LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    -- Scan Workspace for loot
-                    for _, v in pairs(workspace:GetChildren()) do
-                        if v:IsA("BasePart") and (v.Name:lower():find("coin") or v.Name:lower():find("loot") or v:FindFirstChild("TouchInterest")) then
-                            v.CanCollide = false
-                            v.CFrame = hrp.CFrame -- Tarik ke posisi badan
-                        end
-                    end
-                    -- Kirim Remote Batch agar server memproses koleksi
-                    local lootIDs = {}
-                    for _, v in pairs(workspace:GetChildren()) do
-                        if v:IsA("BasePart") and v:FindFirstChild("TouchInterest") then
-                            local id = v:GetAttribute("LootId") or tonumber(v.Name)
-                            if id then table.insert(lootIDs, id) end
-                        end
-                    end
-                    if #lootIDs > 0 then
-                        game:GetService("ReplicatedStorage").Packages._Index["sleitnick_net@0.2.0"].net["RF/Loot_CollectBatch"]:InvokeServer(lootIDs)
-                    end
-                end
-            end)
-        end
-    end
-end)
+local function CreateButton(name, callback)
+    local btn = Instance.new("TextButton")
+    btn.Parent = Container
+    btn.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+    btn.Size = UDim2.new(1, 0, 0, 42)
+    btn.Text = name
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.Ubuntu
+    btn.TextSize = 14
+    
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 6)
+    c.Parent = btn
 
--- [[ LOGIC: GOD MODE ]] --
+    btn.MouseButton1Click:Connect(function()
+        btn.BackgroundColor3 = Color3.fromRGB(60, 65, 75)
+        task.wait(0.1)
+        btn.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+        callback()
+    end)
+end
+
+-- [[ FEATURE LOGICS ]] --
+
+-- God Mode Loop
 task.spawn(function()
     while task.wait(0.1) do
         if _G.GodMode and LP.Character and LP.Character:FindFirstChild("Humanoid") then
@@ -178,28 +187,36 @@ task.spawn(function()
     end
 end)
 
--- [[ UI BUTTONS ]] --
-CreateButton("God Mode", true, function(v) _G.GodMode = v end)
-CreateButton("Magnet Auto Collect", true, function(v) _G.MagnetLoot = v end)
-CreateButton("Heal Mode (+10 HP)", false, function()
-    if LP.Character and LP.Character:FindFirstChild("Humanoid") then
-        LP.Character.Humanoid.Health = LP.Character.Humanoid.Health + 10
+-- Auto Heal Loop
+task.spawn(function()
+    while task.wait(0.5) do
+        if _G.AutoHeal and LP.Character and LP.Character:FindFirstChild("Humanoid") then
+            LP.Character.Humanoid.Health = LP.Character.Humanoid.Health + 10
+        end
     end
 end)
-CreateButton("Equip Best Knife", false, function()
+
+-- [[ CREATE UI ELEMENTS ]] --
+CreateToggle("God Mode", function(v) _G.GodMode = v end)
+CreateToggle("Auto Heal Mode", function(v) _G.AutoHeal = v end)
+
+CreateButton("Equip Best Knife", function()
     game:GetService("ReplicatedStorage").InventoryComm.RF.EquipBestWeapons:InvokeServer()
 end)
-CreateButton("Rebirth", false, function()
+
+CreateButton("Rebirth", function()
     game:GetService("ReplicatedStorage").Packages._Index["sleitnick_net@0.2.0"].net["RE/Rebirth_Request"]:FireServer()
 end)
-CreateButton("Continue Dungeon", false, function()
+
+CreateButton("Continue Dungeon", function()
     game:GetService("ReplicatedStorage").Packages._Index["sleitnick_net@0.2.0"].net["RE/Dungeon_ContinueDungeon"]:FireServer()
 end)
-CreateButton("Stop Dungeon", false, function()
+
+CreateButton("Stop Dungeon", function()
     game:GetService("ReplicatedStorage").Packages._Index["sleitnick_net@0.2.0"].net["RE/Dungeon_TakeLoot"]:FireServer()
 end)
 
--- [[ DRAG & MINIMIZE ]] --
+-- [[ DRAG, MINIMIZE, CLOSE ]] --
 local dragToggle, dragStart, startPos
 Topbar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -214,16 +231,14 @@ UserInputService.InputChanged:Connect(function(input)
         Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
-UserInputService.InputEnded:Connect(function(input)
-    dragToggle = false
-end)
+UserInputService.InputEnded:Connect(function(input) dragToggle = false end)
 
 CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
-local minimized = false
+local mini = false
 MiniBtn.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    local targetSize = minimized and UDim2.new(0, 320, 0, 50) or UDim2.new(0, 320, 0, 360)
-    TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = targetSize}):Play()
-    Container.Visible = not minimized
+    mini = not mini
+    local targetSize = mini and UDim2.new(0, 320, 0, 50) or UDim2.new(0, 320, 0, 340)
+    TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Size = targetSize}):Play()
+    Container.Visible = not mini
 end)
